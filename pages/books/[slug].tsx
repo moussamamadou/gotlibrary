@@ -1,97 +1,76 @@
-import axios from "axios"
+import { NextPage } from "next"
 import { useRouter } from "next/dist/client/router"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect } from "react"
 import CharacterList from "../../components/CharacterList"
+import BookContext from "../../context/book"
+import getBook from "../../context/book/getBook"
+import { BookContextProvider } from "../../context/book/provider"
 import formatDate from "../../lib/formatDate"
 
-interface IBook {
-  name: string
-  released: string
-  publisher: string
-  isbn: string
-  numberOfPages: number
-  povCharacters: Array<String>
+const BookPage: NextPage = () => {
+  return (
+    <BookContextProvider>
+      <BookPageRender />
+    </BookContextProvider>
+  )
 }
 
-const BookPage = () => {
+const BookPageRender: React.FC = () => {
   const router = useRouter()
+
+  const bookContext = useContext(BookContext)
 
   const { slug } = router.query
 
-  const [book, setBook] = useState<IBook>()
-  const [loading, setLoading] = useState<Boolean>(true)
-  const [error, setError] = useState<String>("")
-
-  const getBook = () => {
-    if (slug)
-      axios
-        .get(`${process.env.NEXT_PUBLIC_API}/books/${slug}`)
-        .then((res) => {
-          console.log(res.data)
-          let tempBook: IBook = {
-            name: res.data.name,
-            released: res.data.released,
-            publisher: res.data.publisher,
-            isbn: res.data.isbn,
-            numberOfPages: res.data.numberOfPages,
-            povCharacters: res.data.povCharacters,
-          }
-          setLoading(false)
-          setBook(tempBook)
-        })
-        .catch((error) => {
-          setLoading(false)
-          setError(`Book Page : ${error.message}`)
-        })
-  }
-
   useEffect(() => {
-    getBook()
+    getBook(slug, bookContext)
   }, [slug])
-  useEffect(() => {
-    console.log(book)
-  }, [book])
 
-  if (loading)
+  if (bookContext.state.loading)
     return (
       <div className="flex flex-wrap items-center justify-around max-w-4xl sm:w-full">
         Loading ...
       </div>
     )
 
-  if (error)
+  if (bookContext.state.error)
     return (
       <div className="flex flex-wrap items-center justify-around max-w-4xl sm:w-full">
-        {error} ...
+        {bookContext.state.error} ...
       </div>
     )
 
   return (
     <div className="flex flex-col text-left text-lg gap-4">
-      {book && (
+      {bookContext.state.book && (
         <>
           <div className="w-full text-3xl text-center  mb-2">
-            <strong>Book :</strong> {book.name}
+            <strong>Book :</strong> {bookContext.state.book.name}
           </div>
           <div className="w-full">
-            <strong>ISBN :</strong> {book.isbn}
+            <strong>ISBN :</strong> {bookContext.state.book.isbn}
           </div>
           <div className="w-full">
-            <strong>Publisher :</strong> {book.publisher}
+            <strong>Publisher :</strong> {bookContext.state.book.publisher}
           </div>
           <div className="w-full">
-            <strong>Released :</strong> {formatDate(book.released)}
+            <strong>Released :</strong>{" "}
+            {formatDate(bookContext.state.book.released)}
           </div>
           <div className="w-full">
-            <strong>Number Of Pages :</strong> {book.numberOfPages}
+            <strong>Number Of Pages :</strong>{" "}
+            {bookContext.state.book.numberOfPages}
           </div>
           <div className="w-full">
-            {book.povCharacters && book.povCharacters.length > 0 && (
-              <>
-                <strong className="text-2xl">POV Characters : </strong>
-                <CharacterList charactersUrl={book.povCharacters} />
-              </>
-            )}
+            {bookContext.state.book.povCharacters &&
+              bookContext.state.book.povCharacters.length > 0 && (
+                <>
+                  <strong className="text-2xl">POV Characters : </strong>
+                  <CharacterList
+                    charactersUrl={bookContext.state.book.povCharacters}
+                  />
+                </>
+              )}
           </div>
         </>
       )}
