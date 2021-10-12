@@ -45,15 +45,16 @@ const CharacterList = ({ charactersUrl }: { charactersUrl: String[] }) => {
 
   return (
     <div className="">
-      <strong>POV Characters : </strong>
       {characters &&
-        characters.map((character, index) => (
-          <Link href={`/characters/${getID(character.url)} `} key={index}>
-            <a className="grid grid-cols-3  p-4 mt-2 w-full text-left border rounded-xl hover:text-indigo-600 focus:text-indigo-600">
-              {character.name}
-            </a>
-          </Link>
-        ))}
+        characters.map((character, index) =>
+          character.name ? (
+            <Link href={`/characters/${getID(character.url)} `} key={index}>
+              <a className="grid grid-cols-3  p-4 mt-2 w-full text-left border rounded-xl hover:text-indigo-600 focus:text-indigo-600">
+                {character.name}
+              </a>
+            </Link>
+          ) : null
+        )}
     </div>
   )
 }

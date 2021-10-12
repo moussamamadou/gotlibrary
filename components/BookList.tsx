@@ -50,7 +50,6 @@ const BookList = ({ booksUrl }: { booksUrl: String[] }) => {
 
   return (
     <div className="">
-      <strong className="text-2xl">POV Books : </strong>
       {books &&
         books.map((book, index) => (
           <Link href={`/books/${getID(book.url)}`} key={index}>

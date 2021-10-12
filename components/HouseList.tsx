@@ -53,7 +53,6 @@ const HouseList = ({ housesUrl }: { housesUrl: String[] }) => {
     <div className="">
       {houses && (
         <>
-          <strong className="text-2xl">Houses : </strong>
           {houses.map((house, index) => (
             <Link href={`/houses/${getID(house.url)}`} key={index}>
               <a className="grid p-4 mt-2 w-full text-left border rounded-xl hover:text-indigo-600 focus:text-indigo-600">

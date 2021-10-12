@@ -70,8 +70,8 @@ const BookPage = () => {
     <div className="flex flex-col text-left text-lg gap-4">
       {book && (
         <>
-          <div className="w-full">
-            <strong>Book Name :</strong> {book.name}
+          <div className="w-full text-3xl text-center  mb-2">
+            <strong>Book :</strong> {book.name}
           </div>
           <div className="w-full">
             <strong>ISBN :</strong> {book.isbn}
@@ -85,9 +85,14 @@ const BookPage = () => {
           <div className="w-full">
             <strong>Number Of Pages :</strong> {book.numberOfPages}
           </div>
-          {book.povCharacters && (
-            <CharacterList charactersUrl={book.povCharacters} />
-          )}
+          <div className="w-full">
+            {book.povCharacters && book.povCharacters.length > 0 && (
+              <>
+                <strong className="text-2xl">POV Characters : </strong>
+                <CharacterList charactersUrl={book.povCharacters} />
+              </>
+            )}
+          </div>
         </>
       )}
     </div>

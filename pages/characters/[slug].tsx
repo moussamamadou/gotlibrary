@@ -93,10 +93,22 @@ const CharacterPage = () => {
           <div className="w-full ">
             <strong>Culture :</strong> {character.culture || "Unknown"}
           </div>
-          {character.allegiances && character.allegiances.length > 0 && (
-            <HouseList housesUrl={character.allegiances} />
-          )}
-          {character.povBooks && <BookList booksUrl={character.povBooks} />}
+          <div className="w-full ">
+            {character.allegiances && character.allegiances.length > 0 && (
+              <>
+                <strong className="text-2xl">House of allegiances : </strong>
+                <HouseList housesUrl={character.allegiances} />
+              </>
+            )}
+          </div>
+          <div className="w-full ">
+            {character.povBooks && character.povBooks.length > 0 && (
+              <>
+                <strong className="text-2xl">POV Books : </strong>
+                <BookList booksUrl={character.povBooks} />
+              </>
+            )}
+          </div>
         </>
       )}
     </div>

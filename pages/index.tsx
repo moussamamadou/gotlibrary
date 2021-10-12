@@ -1,5 +1,4 @@
 import type { NextPage } from "next"
-import Head from "next/head"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import axios from "axios"
@@ -49,10 +48,6 @@ const Home: NextPage = () => {
 
   return (
     <div className="">
-      <Head>
-        <title>Home - GOT LIBRARY</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <div className="flex flex-wrap items-center justify-around">
         <h2 className="text-3xl font-bold mb-5">All Ice and Fire Books</h2>
         {books &&
