@@ -3,10 +3,8 @@ import Head from "next/head"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import axios from "axios"
-import moment from "moment"
-
-const getID = (url: String) => url.split("/").pop()
-
+import formatDate from "../lib/formatDate"
+import getID from "../lib/getID"
 interface IBook {
   name: string
   released: string
@@ -55,14 +53,14 @@ const Home: NextPage = () => {
         <title>Home - GOT LIBRARY</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex flex-wrap items-center justify-around max-w-4xl sm:w-full">
+      <div className="flex flex-wrap items-center justify-around">
         <h2 className="text-3xl font-bold mb-5">All Ice and Fire Books</h2>
         {books &&
           books.map((book) => (
-            <Link href={""} key={book.isbn}>
+            <Link href={`/books/${getID(book.url)}`} key={book.isbn}>
               <a className="grid grid-cols-3  p-4 mt-2 w-full text-left border mx-2 rounded-xl hover:text-indigo-600 focus:text-indigo-600">
                 <div> {book.name} </div>
-                <div> {moment(book.released).format("Do MMMM YYYY")}</div>
+                <div> {formatDate(book.released)}</div>
                 <div> ISBN: {book.isbn}</div>
               </a>
             </Link>
