@@ -18,6 +18,7 @@ const reducer = (
       return {
         ...state,
         characters: action.payload.characters,
+        pagination: action.payload.pagination,
         loading: false,
       }
     case "GET_CHARACTERS_FAILURE":

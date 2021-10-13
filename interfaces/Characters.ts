@@ -1,10 +1,12 @@
+import { IPagination } from "./Pagination"
+
 export interface ICharacter {
   url: string
   name: string
   gender: string
   culture: string
   title: Array<String>
-  alias: Array<String>
+  aliases: Array<String>
   born: string
   died: string
   allegiances: Array<String>
@@ -19,6 +21,7 @@ export interface ICharactersState {
   characters: Array<ICharacter>
   loading: boolean
   error: string
+  pagination: IPagination
 }
 export interface ICharacterActions {
   type:
@@ -38,6 +41,7 @@ export interface ICharactersActions {
   payload: {
     characters: Array<ICharacter>
     error: string
+    pagination: IPagination
   }
 }
 
