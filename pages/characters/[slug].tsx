@@ -1,11 +1,11 @@
 import { NextPage } from "next"
 import { useRouter } from "next/dist/client/router"
 import React, { useContext, useEffect } from "react"
-import CharacterList from "../../components/CharacterList"
 import HouseList from "../../components/HouseList"
 import { CharacterContextProvider } from "../../context/character/provider"
 import CharacterContext from "../../context/character"
 import getCharacter from "../../context/character/getCharacter"
+import BookList from "../../components/BookList"
 
 const CharacterPage: NextPage = () => {
   return (
@@ -77,14 +77,12 @@ const CharacterPageRender: React.FC = () => {
               )}
           </div>
           <div className="w-full ">
-            {characterContext.state.character.povCharacters &&
-              characterContext.state.character.povCharacters.length > 0 && (
+            {characterContext.state.character.povBooks &&
+              characterContext.state.character.povBooks.length > 0 && (
                 <>
-                  <strong className="text-2xl">POV Characters : </strong>
-                  <CharacterList
-                    charactersUrl={
-                      characterContext.state.character.povCharacters
-                    }
+                  <strong className="text-2xl">POV Books : </strong>
+                  <BookList
+                    booksUrl={characterContext.state.character.povBooks}
                   />
                 </>
               )}

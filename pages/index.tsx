@@ -19,7 +19,7 @@ const Home: NextPage = () => {
   const getBooks = () => {
     axios
       .get(`${process.env.NEXT_PUBLIC_API}/books?pageSize=15`)
-      .then((res) => {
+      .then((res: any) => {
         let tempBooks: Array<IBook> = []
         res.data.map((books: any) => {
           tempBooks.push({
