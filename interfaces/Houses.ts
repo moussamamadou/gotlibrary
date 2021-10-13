@@ -1,4 +1,5 @@
 export interface IHouse {
+  url: string
   name: string
   coatOfArms: string
   titles: Array<string>

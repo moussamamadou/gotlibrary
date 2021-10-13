@@ -12,6 +12,7 @@ const getCharacter = (
         .get(`${process.env.NEXT_PUBLIC_API}/characters/${slug}`)
         .then((res: any) => {
           let tempCharacter: ICharacter = {
+            url: res.data.url,
             name: res.data.name,
             gender: res.data.gender,
             culture: res.data.culture,

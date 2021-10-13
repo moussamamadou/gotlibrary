@@ -1,4 +1,5 @@
 export interface IBook {
+  url: string
   name: string
   released: string
   publisher: string

@@ -12,6 +12,7 @@ const getBook = (
         .get(`${process.env.NEXT_PUBLIC_API}/books/${slug}`)
         .then((res: any) => {
           let tempBook: IBook = {
+            url: res.data.url,
             name: res.data.name,
             released: res.data.released,
             publisher: res.data.publisher,

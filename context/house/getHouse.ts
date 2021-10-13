@@ -12,6 +12,7 @@ const getHouse = (
         .get(`${process.env.NEXT_PUBLIC_API}/houses/${slug}`)
         .then((res: any) => {
           let tempHouse: IHouse = {
+            url: res.data.url,
             name: res.data.name,
             coatOfArms: res.data.coatOfArms,
             titles: res.data.titles,
