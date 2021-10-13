@@ -15,6 +15,7 @@ const reducer = (
       return {
         ...state,
         houses: action.payload.houses,
+        pagination: action.payload.pagination,
         loading: false,
       }
     case "GET_HOUSES_FAILURE":

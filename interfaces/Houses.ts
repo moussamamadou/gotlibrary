@@ -1,3 +1,5 @@
+import { IPagination } from "./Pagination"
+
 export interface IHouse {
   url: string
   name: string
@@ -21,6 +23,7 @@ export interface IHousesState {
   houses: Array<IHouse>
   loading: boolean
   error: string
+  pagination: IPagination
 }
 
 export interface IHouseActions {
@@ -35,6 +38,7 @@ export interface IHousesActions {
   payload: {
     houses: Array<IHouse>
     error: string
+    pagination: IPagination
   }
 }
 
