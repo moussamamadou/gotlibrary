@@ -1,3 +1,5 @@
+import { IPagination } from "./Pagination"
+
 export interface IBook {
   url: string
   name: string
@@ -17,6 +19,7 @@ export interface IBooksState {
   books: Array<IBook>
   loading: boolean
   error: string
+  pagination: IPagination
 }
 
 export interface IBookActions {
@@ -32,6 +35,7 @@ export interface IBooksActions {
   payload: {
     books: Array<IBook>
     error: string
+    pagination: IPagination
   }
 }
 

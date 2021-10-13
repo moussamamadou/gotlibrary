@@ -15,6 +15,7 @@ const reducer = (
       return {
         ...state,
         books: action.payload.books,
+        pagination: action.payload.pagination,
         loading: false,
       }
     case "GET_BOOKS_FAILURE":
