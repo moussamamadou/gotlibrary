@@ -1,6 +1,6 @@
 import { NextPage } from "next"
 import Link from "next/link"
-import React, { useContext, useEffect, useReducer, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import BooksContext from "../../context/books"
 import getBooks from "../../context/books/getBooks"
 import { BooksContextProvider } from "../../context/books/provider"
@@ -24,10 +24,6 @@ const BooksRender: React.FC = () => {
   useEffect(() => {
     getBooks(currentPage, 6, booksContext)
   }, [currentPage])
-
-  useEffect(() => {
-    console.log(booksContext.state.pagination)
-  }, [booksContext])
 
   if (booksContext.state.loading) return <div>Loading ...</div>
 

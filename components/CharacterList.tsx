@@ -43,8 +43,18 @@ const CharacterListRender: React.FunctionComponent<{
         characters.map((character, index) =>
           character.name ? (
             <Link href={`/characters/${getID(character.url)} `} key={index}>
-              <a className="grid grid-cols-3  p-4 mt-2 w-full text-left border rounded-xl hover:text-indigo-600 focus:text-indigo-600">
-                {character.name}
+              <a className="grid grid-cols-2  p-4 mt-2 w-full text-left border rounded-xl hover:text-indigo-600 focus:text-indigo-600">
+                <div>
+                  {character.name ||
+                    `No Name Character ${getID(character.url)}`}
+                </div>
+                <div>
+                  {character.aliases &&
+                    character.aliases.length > 0 &&
+                    `Alias : ${character.aliases
+                      .toString()
+                      .replaceAll(",", ", ")}`}
+                </div>
               </a>
             </Link>
           ) : null

@@ -83,8 +83,17 @@ const CharactersRender: React.FC = () => {
         {charactersContext.state.characters &&
           charactersContext.state.characters.map((character, index) => (
             <Link href={`/characters/${getID(character.url)}`} key={index}>
-              <a className=" p-4 mt-2 w-full text-left border  rounded-xl hover:text-indigo-600 focus:text-indigo-600">
-                {character.name}
+              <a className="grid grid-cols-2  p-4 mt-2 w-full text-left border  rounded-xl hover:text-indigo-600 focus:text-indigo-600">
+                <div>
+                  {character.name ||
+                    `No Name Character ${getID(character.url)}`}
+                </div>
+                <div>
+                  {character.aliases &&
+                    character.aliases.length > 0 &&
+                    "Alias : " +
+                      character.aliases.toString().replaceAll(",", ", ")}
+                </div>
               </a>
             </Link>
           ))}
@@ -117,8 +126,13 @@ const HousesRender: React.FC = () => {
         {housesContext.state.houses &&
           housesContext.state.houses.map((house, index) => (
             <Link href={`/houses/${getID(house.url)}`} key={index}>
-              <a className="p-4 mt-2 w-full text-left border  rounded-xl hover:text-indigo-600 focus:text-indigo-600">
-                <div> {house.name} </div>
+              <a className="grid grid-cols-2  p-4 mt-2 w-full text-left border  rounded-xl hover:text-indigo-600 focus:text-indigo-600">
+                <div>{house.name || `No Name House ${getID(house.url)}`}</div>
+                <div>
+                  {house.titles &&
+                    house.titles.length > 0 &&
+                    house.titles.toString().replaceAll(",", ", ")}
+                </div>
               </a>
             </Link>
           ))}

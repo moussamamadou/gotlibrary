@@ -48,6 +48,14 @@ const CharacterPageRender: React.FC = () => {
             <strong>Character :</strong> {characterContext.state.character.name}
           </div>
           <div className="w-full">
+            <strong>Alias :</strong>&nbsp;
+            {(characterContext.state.character.aliases &&
+              characterContext.state.character.aliases
+                .toString()
+                .replaceAll(",", ", ")) ||
+              "None"}
+          </div>
+          <div className="w-full">
             <strong>Title :</strong>&nbsp;
             {characterContext.state.character.title
               .toString()

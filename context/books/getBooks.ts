@@ -18,8 +18,6 @@ const getBooks = (
     },
   })
   const url = `${process.env.NEXT_PUBLIC_API}/books?page=${page}&pageSize=${pageSize}`
-  console.log(url)
-
   axios
     .get(url)
     .then((res: any) => {
@@ -37,11 +35,7 @@ const getBooks = (
       })
 
       let tempPagination: any
-      try {
-        tempPagination = parse(res.headers.link)
-      } catch (error) {
-        console.log("Pïnm", error)
-      }
+      tempPagination = parse(res.headers.link)
 
       let pagination: IPagination = {
         first: {

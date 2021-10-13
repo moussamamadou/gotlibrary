@@ -38,7 +38,6 @@ const getCharacters = (
         })
       })
 
-      console.log(tempCharacters[0])
       let tempPagination: any
       tempPagination = parse(res.headers.link)
 

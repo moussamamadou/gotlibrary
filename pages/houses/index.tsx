@@ -24,10 +24,6 @@ const HousesRender: React.FC = () => {
     getHouses(currentPage, 6, housesContext)
   }, [currentPage])
 
-  useEffect(() => {
-    console.log(housesContext.state.pagination)
-  }, [housesContext])
-
   if (housesContext.state.loading) return <div>Loading ...</div>
 
   if (housesContext.state.error)

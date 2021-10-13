@@ -17,7 +17,7 @@ const getCharacter = (
             gender: res.data.gender,
             culture: res.data.culture,
             title: res.data.titles,
-            alias: res.data.alias,
+            aliases: res.data.aliases,
             died: res.data.died,
             born: res.data.born,
             allegiances: res.data.allegiances,

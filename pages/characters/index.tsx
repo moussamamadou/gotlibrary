@@ -1,10 +1,9 @@
 import { NextPage } from "next"
 import Link from "next/link"
-import React, { useContext, useEffect, useReducer, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import CharactersContext from "../../context/characters"
 import getCharacters from "../../context/characters/getCharacters"
 import { CharactersContextProvider } from "../../context/characters/provider"
-import formatDate from "../../lib/formatDate"
 import getID from "../../lib/getID"
 
 const CharactersPage: NextPage = () => {
@@ -24,10 +23,6 @@ const CharactersRender: React.FC = () => {
   useEffect(() => {
     getCharacters(currentPage, 6, charactersContext)
   }, [currentPage])
-
-  useEffect(() => {
-    console.log(charactersContext.state.pagination)
-  }, [charactersContext])
 
   if (charactersContext.state.loading) return <div>Loading ...</div>
 
