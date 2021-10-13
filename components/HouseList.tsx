@@ -1,54 +1,41 @@
-import axios from "axios"
 import Link from "next/link"
-import React, { useEffect, useState } from "react"
-import formatDate from "../lib/formatDate"
+import React, { useContext, useEffect, useState } from "react"
+import HouseContext from "../context/house"
+import getHouse from "../context/house/getHouse"
+import { HouseContextProvider } from "../context/house/provider"
+import { IHouse } from "../interfaces/Houses"
 import getID from "../lib/getID"
 
-interface IHouse {
-  name: string
-  released: string
-  isbn: string
-  url: string
+const HouseList = ({ housesUrl }: { housesUrl: String[] }) => {
+  return (
+    <HouseContextProvider>
+      <HouseListRender housesUrl={housesUrl} />
+    </HouseContextProvider>
+  )
 }
 
-const HouseList = ({ housesUrl }: { housesUrl: String[] }) => {
-  const [houses, setHouses] = useState<Array<IHouse>>([])
-  const [loading, setLoading] = useState<Boolean>(true)
-  const [error, setError] = useState<String>("")
+const HouseListRender: React.FunctionComponent<{
+  housesUrl: String[]
+}> = ({ housesUrl }) => {
+  const [houses, setHouses] = useState([] as Array<IHouse>)
 
-  const getHouse = (charaterId: String | undefined) => {
-    if (charaterId)
-      axios
-        .get(`${process.env.NEXT_PUBLIC_API}/houses/${charaterId}`)
-        .then((res) => {
-          let tempHouse: IHouse = {
-            name: res.data.name,
-            released: res.data.released,
-            isbn: res.data.isbn,
-            url: res.data.url,
-          }
-          setLoading(false)
-          setHouses((state) => [...state, tempHouse])
-          console.log("-Houses : ", houses)
-        })
-        .catch((error) => {
-          setLoading(false)
-          setError(`House List : ${error.message}`)
-        })
-  }
-
+  const houseContext = useContext(HouseContext)
   useEffect(() => {
-    setHouses([])
     housesUrl.map((char) => {
       const charaterId = getID(char)
-      getHouse(charaterId)
+      getHouse(charaterId, houseContext)
     })
   }, [])
 
-  if (loading) return <div>Loading ...</div>
-
-  if (error) return <div>{error} ...</div>
-
+  useEffect(() => {
+    setHouses((chars) => {
+      if (chars && houseContext.state.house) {
+        return [...chars, houseContext.state.house]
+      } else {
+        return []
+      }
+    })
+  }, [houseContext])
   return (
     <div className="">
       {houses && (

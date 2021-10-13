@@ -1,47 +1,41 @@
-import axios from "axios"
 import Link from "next/link"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
+import CharacterContext from "../context/character"
+import getCharacter from "../context/character/getCharacter"
+import { CharacterContextProvider } from "../context/character/provider"
+import { ICharacter } from "../interfaces/Characters"
 import getID from "../lib/getID"
 
-interface ICharacter {
-  name: string
-  url: string
+const CharacterList = ({ charactersUrl }: { charactersUrl: String[] }) => {
+  return (
+    <CharacterContextProvider>
+      <CharacterListRender charactersUrl={charactersUrl} />
+    </CharacterContextProvider>
+  )
 }
 
-const CharacterList = ({ charactersUrl }: { charactersUrl: String[] }) => {
-  const [characters, setCharaters] = useState<Array<ICharacter>>([])
-  const [loading, setLoading] = useState<Boolean>(true)
-  const [error, setError] = useState<String>("")
+const CharacterListRender: React.FunctionComponent<{
+  charactersUrl: String[]
+}> = ({ charactersUrl }) => {
+  const [characters, setCharacters] = useState([] as Array<ICharacter>)
 
-  const getCharacter = (charaterId: String | undefined) => {
-    if (charaterId)
-      axios
-        .get(`${process.env.NEXT_PUBLIC_API}/characters/${charaterId} `)
-        .then((res) => {
-          let tempCharacter: ICharacter = {
-            name: res.data.name,
-            url: res.data.url,
-          }
-          setLoading(false)
-          setCharaters((state) => [...state, tempCharacter])
-        })
-        .catch((error) => {
-          setLoading(false)
-          setError(`Character List : ${error.message}`)
-        })
-  }
-
+  const characterContext = useContext(CharacterContext)
   useEffect(() => {
-    setCharaters([])
     charactersUrl.map((char) => {
       const charaterId = getID(char)
-      getCharacter(charaterId)
+      getCharacter(charaterId, characterContext)
     })
   }, [])
 
-  if (loading) return <div>Loading ...</div>
-
-  if (error) return <div>{error} ...</div>
+  useEffect(() => {
+    setCharacters((chars) => {
+      if (chars && characterContext.state.character) {
+        return [...chars, characterContext.state.character]
+      } else {
+        return []
+      }
+    })
+  }, [characterContext])
 
   return (
     <div className="">

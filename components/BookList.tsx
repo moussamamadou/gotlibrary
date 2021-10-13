@@ -1,52 +1,42 @@
-import axios from "axios"
 import Link from "next/link"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
+import BookContext from "../context/book"
+import getBook from "../context/book/getBook"
+import { BookContextProvider } from "../context/book/provider"
+import { IBook } from "../interfaces/Books"
 import formatDate from "../lib/formatDate"
 import getID from "../lib/getID"
 
-interface IBook {
-  name: string
-  released: string
-  isbn: string
-  url: string
+const BookList = ({ booksUrl }: { booksUrl: String[] }) => {
+  return (
+    <BookContextProvider>
+      <BookListRender booksUrl={booksUrl} />
+    </BookContextProvider>
+  )
 }
 
-const BookList = ({ booksUrl }: { booksUrl: String[] }) => {
-  const [books, setCharaters] = useState<Array<IBook>>([])
-  const [loading, setLoading] = useState<Boolean>(true)
-  const [error, setError] = useState<String>("")
+const BookListRender: React.FunctionComponent<{
+  booksUrl: String[]
+}> = ({ booksUrl }) => {
+  const [books, setBooks] = useState([] as Array<IBook>)
 
-  const getBook = (charaterId: String | undefined) => {
-    if (charaterId)
-      axios
-        .get(`${process.env.NEXT_PUBLIC_API}/books/${charaterId}`)
-        .then((res) => {
-          let tempBook: IBook = {
-            name: res.data.name,
-            released: res.data.released,
-            isbn: res.data.isbn,
-            url: res.data.url,
-          }
-          setLoading(false)
-          setCharaters((state) => [...state, tempBook])
-        })
-        .catch((error) => {
-          setLoading(false)
-          setError(`Book List : ${error.message}`)
-        })
-  }
-
+  const bookContext = useContext(BookContext)
   useEffect(() => {
-    setCharaters([])
     booksUrl.map((char) => {
       const charaterId = getID(char)
-      getBook(charaterId)
+      getBook(charaterId, bookContext)
     })
   }, [])
 
-  if (loading) return <div>Loading ...</div>
-
-  if (error) return <div>{error} ...</div>
+  useEffect(() => {
+    setBooks((chars) => {
+      if (chars && bookContext.state.book) {
+        return [...chars, bookContext.state.book]
+      } else {
+        return []
+      }
+    })
+  }, [bookContext])
 
   return (
     <div className="">
