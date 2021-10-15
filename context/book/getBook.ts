@@ -1,6 +1,7 @@
 import axios from "axios"
 import _ from "lodash"
 import { IBook, IBookContext } from "../../interfaces/Books"
+import { bookError, bookLoaded } from "./actions"
 
 const getBook = (
   slug: string | string[] | undefined,
@@ -20,23 +21,13 @@ const getBook = (
             numberOfPages: res.data.numberOfPages,
             povCharacters: res.data.povCharacters,
           }
-
-          bookContext.dispatch({
-            type: "GET_BOOK_SUCCESS",
-            payload: { book: tempBook, error: "" },
-          })
+          bookContext.dispatch(bookLoaded(tempBook))
         })
         .catch((error) => {
-          bookContext.dispatch({
-            type: "GET_BOOK_FAILURE",
-            payload: { book: {} as IBook, error: error.message },
-          })
+          bookContext.dispatch(bookError(error.message))
         })
     } else {
-      bookContext.dispatch({
-        type: "GET_BOOK_FAILURE",
-        payload: { book: {} as IBook, error: "This Book Does not exist" },
-      })
+      bookContext.dispatch(bookError("This Book Does not exist"))
     }
   }
 }

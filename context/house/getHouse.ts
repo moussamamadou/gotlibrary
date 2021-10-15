@@ -1,6 +1,7 @@
 import axios from "axios"
 import _ from "lodash"
 import { IHouse, IHouseContext } from "../../interfaces/Houses"
+import { houseError, houseLoaded } from "./actions"
 
 const getHouse = (
   slug: string | string[] | undefined,
@@ -25,25 +26,13 @@ const getHouse = (
             swornMembers: res.data.swornMembers,
           }
 
-          houseContext.dispatch({
-            type: "GET_HOUSE_SUCCESS",
-            payload: { house: tempHouse, error: "" },
-          })
+          houseContext.dispatch(houseLoaded(tempHouse))
         })
         .catch((error) => {
-          houseContext.dispatch({
-            type: "GET_HOUSE_FAILURE",
-            payload: { house: {} as IHouse, error: error.message },
-          })
+          houseContext.dispatch(houseError(error.message))
         })
     } else {
-      houseContext.dispatch({
-        type: "GET_HOUSE_FAILURE",
-        payload: {
-          house: {} as IHouse,
-          error: "This House Does not exist",
-        },
-      })
+      houseContext.dispatch(houseError("This House Does not exist"))
     }
   }
 }

@@ -1,6 +1,7 @@
 import axios from "axios"
 import _ from "lodash"
 import { ICharacter, ICharacterContext } from "../../interfaces/Characters"
+import { characterError, characterLoaded } from "./actions"
 
 const getCharacter = (
   slug: string | string[] | undefined,
@@ -24,25 +25,13 @@ const getCharacter = (
             povBooks: res.data.povBooks,
           }
 
-          characterContext.dispatch({
-            type: "GET_CHARACTER_SUCCESS",
-            payload: { character: tempCharacter, error: "" },
-          })
+          characterContext.dispatch(characterLoaded(tempCharacter))
         })
         .catch((error) => {
-          characterContext.dispatch({
-            type: "GET_CHARACTER_FAILURE",
-            payload: { character: {} as ICharacter, error: error.message },
-          })
+          characterContext.dispatch(characterError(error.message))
         })
     } else {
-      characterContext.dispatch({
-        type: "GET_CHARACTER_FAILURE",
-        payload: {
-          character: {} as ICharacter,
-          error: "This Character Does not exist",
-        },
-      })
+      characterContext.dispatch(characterError("This Character Does not exist"))
     }
   }
 }

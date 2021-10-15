@@ -3,20 +3,18 @@ import _ from "lodash"
 import { ICharacter, ICharactersContext } from "../../interfaces/Characters"
 import { IPagination } from "../../interfaces/Pagination"
 import parse from "parse-link-header"
+import {
+  charactersError,
+  charactersLoaded,
+  charactersRequested,
+} from "./actions"
 
 const getCharacters = (
   page: number,
   pageSize: number,
   charactersContext: ICharactersContext
 ) => {
-  charactersContext.dispatch({
-    type: "GET_CHARACTERS_REQUEST",
-    payload: {
-      characters: [] as Array<ICharacter>,
-      error: "",
-      pagination: {} as IPagination,
-    },
-  })
+  charactersContext.dispatch(charactersRequested())
   const url = `${process.env.NEXT_PUBLIC_API}/characters?page=${page}&pageSize=${pageSize}`
 
   axios
@@ -78,24 +76,10 @@ const getCharacters = (
           },
         }
       }
-      charactersContext.dispatch({
-        type: "GET_CHARACTERS_SUCCESS",
-        payload: {
-          characters: tempCharacters,
-          error: "",
-          pagination: pagination,
-        },
-      })
+      charactersContext.dispatch(charactersLoaded(tempCharacters, pagination))
     })
     .catch((error) => {
-      charactersContext.dispatch({
-        type: "GET_CHARACTERS_FAILURE",
-        payload: {
-          characters: [] as Array<ICharacter>,
-          error: error.message,
-          pagination: {} as IPagination,
-        },
-      })
+      charactersContext.dispatch(charactersError(error.message))
     })
 }
 export default getCharacters

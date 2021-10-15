@@ -3,20 +3,14 @@ import _ from "lodash"
 import { IHouse, IHousesContext } from "../../interfaces/Houses"
 import { IPagination } from "../../interfaces/Pagination"
 import parse from "parse-link-header"
+import { housesError, housesLoaded, housesRequested } from "./actions"
 
 const getHouses = (
   page: number,
   pageSize: number,
   housesContext: IHousesContext
 ) => {
-  housesContext.dispatch({
-    type: "GET_HOUSES_REQUEST",
-    payload: {
-      houses: [] as Array<IHouse>,
-      error: "",
-      pagination: {} as IPagination,
-    },
-  })
+  housesContext.dispatch(housesRequested())
 
   axios
     .get(
@@ -80,24 +74,10 @@ const getHouses = (
           },
         }
       }
-      housesContext.dispatch({
-        type: "GET_HOUSES_SUCCESS",
-        payload: {
-          houses: tempHouses,
-          error: "",
-          pagination: pagination,
-        },
-      })
+      housesContext.dispatch(housesLoaded(tempHouses, tempPagination))
     })
     .catch((error) => {
-      housesContext.dispatch({
-        type: "GET_HOUSES_FAILURE",
-        payload: {
-          houses: [] as Array<IHouse>,
-          error: error.message,
-          pagination: {} as IPagination,
-        },
-      })
+      housesContext.dispatch(housesError(error.message))
     })
 }
 export default getHouses

@@ -3,20 +3,14 @@ import _ from "lodash"
 import { IBook, IBooksContext } from "../../interfaces/Books"
 import parse from "parse-link-header"
 import { IPagination } from "../../interfaces/Pagination"
+import { booksError, booksLoaded, booksRequested } from "./actions"
 
 const getBooks = (
   page: number,
   pageSize: number,
   booksContext: IBooksContext
 ) => {
-  booksContext.dispatch({
-    type: "GET_BOOKS_REQUEST",
-    payload: {
-      books: [] as Array<IBook>,
-      error: "",
-      pagination: {} as IPagination,
-    },
-  })
+  booksContext.dispatch(booksRequested())
   const url = `${process.env.NEXT_PUBLIC_API}/books?page=${page}&pageSize=${pageSize}`
   axios
     .get(url)
@@ -75,20 +69,10 @@ const getBooks = (
         }
       }
 
-      booksContext.dispatch({
-        type: "GET_BOOKS_SUCCESS",
-        payload: { books: tempBooks, error: "", pagination: pagination },
-      })
+      booksContext.dispatch(booksLoaded(tempBooks, pagination))
     })
     .catch((error) => {
-      booksContext.dispatch({
-        type: "GET_BOOKS_FAILURE",
-        payload: {
-          books: [] as Array<IBook>,
-          error: "---" + error.message,
-          pagination: {} as IPagination,
-        },
-      })
+      booksContext.dispatch(booksError(error.message))
     })
 }
 export default getBooks
