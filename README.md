@@ -1,4 +1,4 @@
-# GOT LIBRARY V2
+# GOT LIBRARY 
 
 - Added ContextAPI using Redux Pattern
 - Add pages/books to see all books
