@@ -1,113 +1,99 @@
-import axios from "axios"
+import { NextPage } from "next"
 import { useRouter } from "next/dist/client/router"
-import React, { useEffect, useState } from "react"
-import BookList from "../../components/BookList"
+import React, { useContext, useEffect } from "react"
 import HouseList from "../../components/HouseList"
+import { CharacterContextProvider } from "../../context/character/provider"
+import CharacterContext from "../../context/character"
+import getCharacter from "../../context/character/getCharacter"
+import BookList from "../../components/BookList"
 
-interface ICharacter {
-  name: string
-  gender: string
-  culture: string
-  title: Array<String>
-  alias: Array<String>
-  born: string
-  died: string
-  allegiances: Array<String>
-  povBooks: Array<String>
+const CharacterPage: NextPage = () => {
+  return (
+    <CharacterContextProvider>
+      <CharacterPageRender />
+    </CharacterContextProvider>
+  )
 }
 
-const CharacterPage = () => {
+const CharacterPageRender: React.FC = () => {
   const router = useRouter()
+
+  const characterContext = useContext(CharacterContext)
 
   const { slug } = router.query
 
-  const [character, setCharacter] = useState<ICharacter>()
-  const [loading, setLoading] = useState<Boolean>(true)
-  const [error, setError] = useState<String>("")
-
-  const getCharacter = () => {
-    if (slug)
-      axios
-        .get(`${process.env.NEXT_PUBLIC_API}/characters/${slug}`)
-        .then((res) => {
-          console.log(res.data)
-          let tempCharacter: ICharacter = {
-            name: res.data.name,
-            gender: res.data.gender,
-            culture: res.data.culture,
-            title: res.data.titles,
-            alias: res.data.alias,
-            died: res.data.died,
-            born: res.data.born,
-            allegiances: res.data.allegiances,
-            povBooks: res.data.povBooks,
-          }
-          setLoading(false)
-          setCharacter(tempCharacter)
-        })
-        .catch((error) => {
-          setLoading(false)
-          setError(`Character Page : ${error.message}`)
-        })
-  }
-
   useEffect(() => {
-    getCharacter()
+    getCharacter(slug, characterContext)
   }, [slug])
 
-  useEffect(() => {
-    console.log(character)
-  }, [character])
-
-  if (loading)
+  if (characterContext.state.loading)
     return (
       <div className="flex flex-wrap items-center justify-around max-w-4xl sm:w-full">
         Loading ...
       </div>
     )
 
-  if (error)
+  if (characterContext.state.error)
     return (
       <div className="flex flex-wrap items-center justify-around max-w-4xl sm:w-full">
-        {error} ...
+        {characterContext.state.error} ...
       </div>
     )
 
   return (
     <div className="flex flex-col text-left text-lg gap-4">
-      {character && (
+      {characterContext.state.character && (
         <>
           <div className="w-full text-3xl text-center  mb-2">
-            <strong>Character :</strong> {character.name}
+            <strong>Character :</strong> {characterContext.state.character.name}
+          </div>
+          <div className="w-full">
+            <strong>Alias :</strong>&nbsp;
+            {(characterContext.state.character.aliases &&
+              characterContext.state.character.aliases
+                .toString()
+                .replaceAll(",", ", ")) ||
+              "None"}
           </div>
           <div className="w-full">
             <strong>Title :</strong>&nbsp;
-            {character.title.toString().replaceAll(",", ", ") || "No Title"}
+            {characterContext.state.character.title
+              .toString()
+              .replaceAll(",", ", ") || "No Title"}
           </div>
           <div className="w-full">
-            <strong>Born :</strong> {character.born || "Unknown"}
+            <strong>Born :</strong>{" "}
+            {characterContext.state.character.born || "Unknown"}
           </div>
           <div className="w-full">
-            <strong>Gender :</strong> {character.gender || "Unknown"}
+            <strong>Gender :</strong>{" "}
+            {characterContext.state.character.gender || "Unknown"}
           </div>
           <div className="w-full ">
-            <strong>Culture :</strong> {character.culture || "Unknown"}
+            <strong>Culture :</strong>{" "}
+            {characterContext.state.character.culture || "Unknown"}
           </div>
           <div className="w-full ">
-            {character.allegiances && character.allegiances.length > 0 && (
-              <>
-                <strong className="text-2xl">House of allegiances : </strong>
-                <HouseList housesUrl={character.allegiances} />
-              </>
-            )}
+            {characterContext.state.character.allegiances &&
+              characterContext.state.character.allegiances.length > 0 && (
+                <>
+                  <strong className="text-2xl">House of allegiances : </strong>
+                  <HouseList
+                    housesUrl={characterContext.state.character.allegiances}
+                  />
+                </>
+              )}
           </div>
           <div className="w-full ">
-            {character.povBooks && character.povBooks.length > 0 && (
-              <>
-                <strong className="text-2xl">POV Books : </strong>
-                <BookList booksUrl={character.povBooks} />
-              </>
-            )}
+            {characterContext.state.character.povBooks &&
+              characterContext.state.character.povBooks.length > 0 && (
+                <>
+                  <strong className="text-2xl">POV Books : </strong>
+                  <BookList
+                    booksUrl={characterContext.state.character.povBooks}
+                  />
+                </>
+              )}
           </div>
         </>
       )}
